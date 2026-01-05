@@ -57,3 +57,5 @@ function simulationTick(){
 		org.move()
 	}
 }
+
+console.log = (x)=>output.innerHTML += "<br>"+x
