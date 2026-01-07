@@ -50,7 +50,7 @@ for(let i = 0; i<18; i++){
 	moths = moths.concat(new moth(new genotype(0,0),{x:Math.floor(Math.random()*6),y:Math.floor(Math.random()*6)}))
 }
 
-output.innerHTML += "I am error"
+
 
 function simulationTick(){
 	for(let org of moths){
@@ -59,3 +59,4 @@ function simulationTick(){
 }
 
 console.log = (x)=>output.innerHTML += "<br>"+x
+console.log("test")
