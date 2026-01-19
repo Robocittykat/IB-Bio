@@ -11,7 +11,7 @@ class genotype{
 	}
 	
 	calcPheno(){
-		return Math.max(g1,g2)
+		return Math.max(this.g1,this.g2)
 	}
 }
 
@@ -36,12 +36,12 @@ function t(type){
 }
 
 let forest = [
-	[t(0),t(-1),t(0),t(-1),t(0),t(-1)],
-	[t(0),t(-1),t(0),t(-1),t(0),t(-1)],
-	[t(0),t(-1),t(0),t(-1),t(0),t(-1)],
-	[t(0),t(-1),t(0),t(-1),t(0),t(-1)],
-	[t(0),t(-1),t(0),t(-1),t(0),t(-1)],
-	[t(0),t(-1),t(0),t(-1),t(0),t(-1)],
+	[t(0),t("-"),t(0),t("-"),t(0),t("-")],
+	[t(0),t("-"),t(0),t("-"),t(0),t("-")],
+	[t(0),t("-"),t(0),t("-"),t(0),t("-")],
+	[t(0),t("-"),t(0),t("-"),t(0),t("-")],
+	[t(0),t("-"),t(0),t("-"),t(0),t("-")],
+	[t(0),t("-"),t(0),t("-"),t(0),t("-")],
 ]
 
 
@@ -58,5 +58,25 @@ function simulationTick(){
 	}
 }
 
-console.log = (x)=>output.innerHTML += "<br>"+x
-console.log("test")
+
+console.log(forest)
+
+function showForest(){
+    let toLog = ""
+    for(let i=0; i<forest.length; i++){
+	for(let j=0; j<forest[i].length; j++){
+	    let noMoth = true
+	    for(org of moths){
+		if(org.pos.x == j && org.pos.y == i){
+		    toLog += ["m","M"][org.geno.calcPheno()]
+		    noMoth = false
+		    break
+		}
+	    }if(noMoth){
+		toLog += forest[i][j].type
+	    }
+	}
+	toLog += "\n"
+    }
+    console.log(toLog)
+}showForest()
