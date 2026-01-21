@@ -1,82 +1,114 @@
-class tile{
-	constructor(type){
-		this.type = type
-	}
+let features = {
+    a:false, //large population
+    b:true, //accurate genetics
+    c:false, //random reproduction
+    d:false, //age mechanic
+    e:false, //complexified predators
+    trees:0,
 }
 
 class genotype{
-	constructor(g1,g2){
-		this.g1 = g1
-		this.g2 = g2
+    constructor(...gene){
+	this.genes = gene
+	if(gene.length == 1){
+	    this.color = gene[0]
+	}else{
+	    this.color = this.calcPheno()
 	}
+    }
 	
-	calcPheno(){
-		return Math.max(this.g1,this.g2)
-	}
-}
+    calcPheno(){
+	return Math.max(...this.genes)
+    }
+}let g = (...gene)=>new genotype(...gene)
+
 
 class moth{
-	constructor(geno,pos){
-		this.color = geno.calcPheno
-		this.geno = geno
-		this.pos = pos
-	}
-	
-	move(){
-		this.pos.x += Math.sign(Math.random()-0.5)
-		this.pos.x = this.pos.x % 6
-		
-		this.pos.y += Math.sign(Math.random()-0.5)
-		this.pos.y = this.pos.y % 6
-	}
+    constructor(geno){
+	this.geno = geno
+    }		
 }
 
-function t(type){
-	return new tile(type)
-}
 
-let forest = [
-	[t(0),t("-"),t(0),t("-"),t(0),t("-")],
-	[t(0),t("-"),t(0),t("-"),t(0),t("-")],
-	[t(0),t("-"),t(0),t("-"),t(0),t("-")],
-	[t(0),t("-"),t(0),t("-"),t(0),t("-")],
-	[t(0),t("-"),t(0),t("-"),t(0),t("-")],
-	[t(0),t("-"),t(0),t("-"),t(0),t("-")],
-]
 
 
 let moths = []
-for(let i = 0; i<18; i++){
-	moths = moths.concat(new moth(new genotype(0,0),{x:Math.floor(Math.random()*6),y:Math.floor(Math.random()*6)}))
+for(let i = 0; i<(10*100**features.a); i++){
+    if(!features.b){
+        moths = moths.concat(new moth(g(Math.floor(Math.random()*2))))
+    }else{
+	moths = moths.concat(new moth(g(Math.floor(Math.random()*2),Math.floor(Math.random()*2))))
+    }
 }
 
 
 
 function simulationTick(){
-	for(let org of moths){
-		org.move()
+    let killedMoths = []
+    for(let org of moths){
+	if(org.geno.color == features.trees){
+	    if(Math.random() < 0.01){
+		killedMoths = killedMoths.concat(org)
+	    }
+	}else{
+	    if(Math.random() < 0.2){
+		killedMoths = killedMoths.concat(org)
+	    }
 	}
+    }
+    for(let org of killedMoths){
+	moths.splice(moths.indexOf(org),1)
+    }
+    let newMoths = []
+    for(let org of killedMoths){
+	let genes
+	if(!features.b){
+	    genes = moths[Math.floor(Math.random()*moths.length)].geno.color
+	    if(Math.random() < 0.1){
+	        genes = Number(!genes)
+	    }
+	}else{
+	    let p1 = moths[Math.floor(Math.random()*moths.length)]
+            let p2 = moths[Math.floor(Math.random()*moths.length)]
+
+	    let g1 = p1.geno.genes[Math.floor(Math.random()*2)]
+	    let g2 = p2.geno.genes[Math.floor(Math.random()*2)]
+	    genes = [g1,g2]
+        }
+	newMoths = newMoths.concat(new moth(g(genes)))
+    }moths = moths.concat(newMoths)
+
+    mothInfo()
 }
 
 
-console.log(forest)
 
-function showForest(){
-    let toLog = ""
-    for(let i=0; i<forest.length; i++){
-	for(let j=0; j<forest[i].length; j++){
-	    let noMoth = true
-	    for(org of moths){
-		if(org.pos.x == j && org.pos.y == i){
-		    toLog += ["m","M"][org.geno.calcPheno()]
-		    noMoth = false
-		    break
-		}
-	    }if(noMoth){
-		toLog += forest[i][j].type
+function mothInfo(){
+    let dark = 0
+    let light = 0
+    let carriers = 0
+    for(let org of moths){
+	if(org.geno.color == 0){
+	    light++
+	}else{
+	    dark++
+	}
+
+	if(features.b){
+	    if(org.geno.genes[0] != org.geno.genes[1]){
+		carriers++
 	    }
 	}
-	toLog += "\n"
     }
-    console.log(toLog)
-}showForest()
+    console.log("dark:" + dark)
+    console.log("light:" + light)
+    if(features.b){
+	console.log("carriers:" + carriers)
+    }
+    display.max = moths.length
+    display.value=light
+}
+
+mothInfo()
+
+//setInterval(simulationTick,100)
