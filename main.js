@@ -213,8 +213,8 @@ function simulationTick(){
 
 function checkMoths(){
 	if(moths.length == 0){
-		data[trial].cp1 = 1750
-		data[trial].cp2 = 1750
+		data[trial].cp1 = 850
+		data[trial].cp2 = 950
 		upkeep()
 		return
 	}
