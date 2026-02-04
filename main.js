@@ -275,7 +275,7 @@ let startTime
 let testTime
 
 data = []
-for(let i = 0; i<40; i++){
+for(let i = 0; i<80; i++){
 	data = data.concat({cp1:null , cp2:null , score:null})
 }
 
@@ -297,14 +297,17 @@ function upkeep(){
 		
 		
 		trial ++
-		if(trial >= 40){
+		if(trial >= 80){
 			let average = 0
-			for(let i = 0; i<40; i++){
-				average += data[i].score/40
-			}localStorage.setItem(test,average)
+			let trials = []
+			for(let i = 0; i<80; i++){
+				average += data[i].score/80
+				trials = trials.concat(data[i].score)
+			}localStorage.setItem(test,{average:average,trials:trials})
 			
 			console.log(test + ": " + average)
 			console.log(test + " completed in " + (new Date().getTime() - testTime.getTime())/1000)
+			console.log(trials)
 			
 			trial = 0
 			test ++
@@ -321,7 +324,7 @@ function upkeep(){
 			
 			
 			data = []
-			for(let i = 0; i<40; i++){
+			for(let i = 0; i<80; i++){
 				data = data.concat({cp1:null , cp2:null , score:null})
 			}
 		}
