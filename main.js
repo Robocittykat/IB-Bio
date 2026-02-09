@@ -79,7 +79,9 @@ function ageToDeathRate(age){
 
 function simulationTick(){
 	let carryingCap = 500 * 10**features.a
-	while(moths.length > carryingCap){moths.shift()}
+	while(moths.length > carryingCap){
+		moths.splice(Math.floor(Math.random()*moths.length),1)
+	}
 	
     let killedMoths = []
 	
